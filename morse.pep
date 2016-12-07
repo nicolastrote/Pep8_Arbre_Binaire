@@ -1,4 +1,4 @@
-; 
+;
 ;
 ; Le programme "TP3 - Morse personnalisé".
 ;
@@ -11,253 +11,253 @@
 ; *
 ; * Lancement du programme et initialisation
 ; *
-main:    LDA     0,i
-         CALL    iniRacin             ; création de la racine
-         CALL    initE                ; création du noeud (".", 'E')
-         CALL    initVidE             ; création du noeud ("..", '0')
-         CALL    initS                ; création du noeud ("...", 'S')
-         CALL    initT                ; création du noeud ("-", 'T')
-         CALL    initVidT             ; création du noeud ("--", '0')
-         CALL    initO                ; création du noeud ("---", 'O')         
-         BR      menu  
+main:    LDA     0,i         
+         CALL    iniRacin    ; création de la racine
+         CALL    initE       ; création du noeud (".", 'E')
+         CALL    initVidE    ; création du noeud ("..", '0')
+         CALL    initS       ; création du noeud ("...", 'S')
+         CALL    initT       ; création du noeud ("-", 'T')
+         CALL    initVidT    ; création du noeud ("--", '0')
+         CALL    initO       ; création du noeud ("---", 'O')
+         BR      menu        
 ; *
 ; * Menu du programme
-; *    
-menu:    STX     racine,d             ; initialisation de X
-         LDA     0,i                  ; initialisation de A
-         CHARI   choix,d              ; lecture du choix = {q,t,c, ,\n}
+; *
+menu:    STX     racine,d    ; initialisation de X
+         LDA     0,i         ; initialisation de A
+         CHARI   choix,d     ; lecture du choix = {q,t,c, ,\n}
          LDBYTEA choix,d     
 ;
-         CPA     '\n',i               ; cas choix = '\n'
-         BREQ    menu                 ; =>  main
+         CPA     '\n',i      ; cas choix = '\n'
+         BREQ    menu        ; =>  main
 ;
-         CPA     ' ',i                ; cas choix = ' '
-         BREQ    menu                 ; =>  main
+         CPA     ' ',i       ; cas choix = ' '
+         BREQ    menu        ; =>  main
 ;
-         CPA     0,i                  ; cas choix = null
-         BREQ    menu                 ; =>  main   
+         CPA     0,i         ; cas choix = null
+         BREQ    menu        ; =>  main
 ;
-         CPA     'q',i                ; cas choix = 'q'
-         BREQ    fin                  ; =>  fin
+         CPA     'q',i       ; cas choix = 'q'
+         BREQ    fin         ; =>  fin
 ;
-         CPA     'd',i                ; cas choix = 'd'
-         BREQ    decoded              ; =>  décodage d'une lettre
+         CPA     'd',i       ; cas choix = 'd'
+         BREQ    decoded     ; =>  décodage d'une lettre
 ;
-         CPA     't',i                ; cas choix = 't'   
-         BREQ    decoded              ; =>  traduction d'une séquence morse complète en texte. 
+         CPA     't',i       ; cas choix = 't'
+         BREQ    decoded     ; =>  traduction d'une séquence morse complète en texte.
 ;
-         CPA     'a',i                ; cas choix = 'a'
-         BREQ    entreeA              ; =>  Ajoute un code Morse
+         CPA     'a',i       ; cas choix = 'a'
+         BREQ    entreeA     ; =>  Ajoute un code Morse
 ;
-         CPA     'l',i                ; cas choix = 'l'
-         BREQ    decoded              ; =>  Liste les caractères de l'arbre
+         CPA     'l',i       ; cas choix = 'l'
+         BREQ    decoded     ; =>  Liste les caractères de l'arbre
 ;
-         BR      erreur               ; sinon => erreur 
+         BR      erreur      ; sinon => erreur
 ;
-choix:   .BLOCK  1                    ; #1c ; Choix du programme
+choix:   .BLOCK  1           ; #1c ; Choix du programme
 ;
 ;
-iniRacin: LDA    mLength,i            ; taille d'un maillon = 4 
-         CALL    new                  ; X = new Maillon(); #mVal #mNextP #mNextT 
-         LDA     0,i   
-         LDBYTEA "0",i                ; A = '0'
-         STBYTEA mVal,x               ; X.val = 0;
-         LDA     carNull,d       
-         STA     mNextP,x             ; X.NextP = 0;
-         STA     mNextT,x             ; X.NextT = 0;  
-         STX     racine,d             ; racine = X;           
-         RET0
+iniRacin:LDA     mLength,i   ; taille d'un maillon = 4
+         CALL    new         ; X = new Maillon(); #mVal #mNextP #mNextT
+         LDA     0,i         
+         LDBYTEA "0",i       ; A = '0'
+         STBYTEA mVal,x      ; X.val = 0;
+         LDA     carNull,d   
+         STA     mNextP,x    ; X.NextP = 0;
+         STA     mNextT,x    ; X.NextT = 0;
+         STX     racine,d    ; racine = X;
+         RET0                
 ;
-initE:   LDX     racine,d             ; Ajoute(".", 'E')   
-         LDA     0,i          
-         LDBYTEA "E",i
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    newNodeP 
-         STX     nodeE,d              ; nodeE = adresse du noeud (".", 'E')
-         RET0
+initE:   LDX     racine,d    ; Ajoute(".", 'E')
+         LDA     0,i         
+         LDBYTEA "E",i       
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    newNodeP    
+         STX     nodeE,d     ; nodeE = adresse du noeud (".", 'E')
+         RET0                
 ;
-initVidE: LDX     nodeE,d             ; Ajoute("..", '0')
-         LDA     0,i          
-         LDBYTEA "0",i
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    newNodeP 
-         STX     nodeVidE,d           ; nodeVidE = adresse du noeud ("..", '0')
-         RET0
+initVidE:LDX     nodeE,d     ; Ajoute("..", '0')
+         LDA     0,i         
+         LDBYTEA "0",i       
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    newNodeP    
+         STX     nodeVidE,d  ; nodeVidE = adresse du noeud ("..", '0')
+         RET0                
 ;
-initS:   LDX     nodeVidE,d           ; Ajoute("...", 'S');
-         LDA     0,i          
-         LDBYTEA "S",i
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    newNodeP 
-         RET0
+initS:   LDX     nodeVidE,d  ; Ajoute("...", 'S');
+         LDA     0,i         
+         LDBYTEA "S",i       
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    newNodeP    
+         RET0                
 ;
-initT:   LDX     racine,d             ; Ajoute("-", 'T');    
-         LDA     0,i          
-         LDBYTEA "T",i
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    newNodeT 
-         STX     nodeT,d              ; nodeT = adresse du noeud ("-", 'T')
-         RET0
+initT:   LDX     racine,d    ; Ajoute("-", 'T');
+         LDA     0,i         
+         LDBYTEA "T",i       
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    newNodeT    
+         STX     nodeT,d     ; nodeT = adresse du noeud ("-", 'T')
+         RET0                
 ;
-initVidT:LDX     nodeT,d              ; Ajoute("--", '0');    
-         LDA     0,i          
-         LDBYTEA "0",i
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    newNodeT 
-         STX     nodeVidT,d           ; nodeT = adresse du noeud ("--", '0')
-         RET0
+initVidT:LDX     nodeT,d     ; Ajoute("--", '0');
+         LDA     0,i         
+         LDBYTEA "0",i       
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    newNodeT    
+         STX     nodeVidT,d  ; nodeT = adresse du noeud ("--", '0')
+         RET0                
 ;
-initO:   LDX     nodeVidT,d           ; Ajoute("---", 'O');    
-         LDA     0,i          
-         LDBYTEA "O",i
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    newNodeT 
-         RET0
+initO:   LDX     nodeVidT,d  ; Ajoute("---", 'O');
+         LDA     0,i         
+         LDBYTEA "O",i       
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    newNodeT    
+         RET0                
 ;
-newNodeP:STX    adOldNe,d             ; adOldNe = X;  
-         LDA     mLength,i        
-         CALL    new                  ; X = new Maillon(); #mVal #mNextP #mNextT 
-         LDA     0,i   
-         LDBYTEA unChar,d             ; A = unChar
-         STBYTEA mVal,x               ; X.val = unChar;
-         LDA     carNull,d            ; A = "0"      
-         STA     mNextP,x             ; X.NextP = 0;
-         STA     mNextT,x             ; X.NextT = 0;  
-         STX     adNewNe,d            ; adNewNe = X; 
-         LDX     adOldNe,d            ; x = adOldNe  
-         LDA     adNewNe,d            ; A = adNewNe    
-         STA     mNextP,x             ; adOldNe.mNextP  =  adNewNe
-         LDX     adNewNe,d            ; x = adNewNe 
-         RET0          
+newNodeP:STX     adOldNe,d   ; adOldNe = X;
+         LDA     mLength,i   
+         CALL    new         ; X = new Maillon(); #mVal #mNextP #mNextT
+         LDA     0,i         
+         LDBYTEA unChar,d    ; A = unChar
+         STBYTEA mVal,x      ; X.val = unChar;
+         LDA     carNull,d   ; A = "0"
+         STA     mNextP,x    ; X.NextP = 0;
+         STA     mNextT,x    ; X.NextT = 0;
+         STX     adNewNe,d   ; adNewNe = X;
+         LDX     adOldNe,d   ; x = adOldNe
+         LDA     adNewNe,d   ; A = adNewNe
+         STA     mNextP,x    ; adOldNe.mNextP  =  adNewNe
+         LDX     adNewNe,d   ; x = adNewNe
+         RET0                
 ;
-newNodeT:STX    adOldNe,d             ; adOldNe = X;  
-         LDA     mLength,i        
-         CALL    new                  ; X = new Maillon(); #mVal #mNextP #mNextT 
-         LDA     0,i   
-         LDBYTEA unChar,d             ; A = unChar
-         STBYTEA mVal,x               ; X.val = unChar;
-         LDA     carNull,d            ; A = "0"      
-         STA     mNextP,x             ; X.NextP = 0;
-         STA     mNextT,x             ; X.NextT = 0;  
-         STX     adNewNe,d            ; adNewNe = X; 
-         LDX     adOldNe,d            ; x = adOldNe  
-         LDA     adNewNe,d            ; A = adNewNe    
-         STA     mNextT,x             ; adOldNe.mNextT  =  adNewNe
-         LDX     adNewNe,d            ; x = adNewNe 
-         RET0          
+newNodeT:STX     adOldNe,d   ; adOldNe = X;
+         LDA     mLength,i   
+         CALL    new         ; X = new Maillon(); #mVal #mNextP #mNextT
+         LDA     0,i         
+         LDBYTEA unChar,d    ; A = unChar
+         STBYTEA mVal,x      ; X.val = unChar;
+         LDA     carNull,d   ; A = "0"
+         STA     mNextP,x    ; X.NextP = 0;
+         STA     mNextT,x    ; X.NextT = 0;
+         STX     adNewNe,d   ; adNewNe = X;
+         LDX     adOldNe,d   ; x = adOldNe
+         LDA     adNewNe,d   ; A = adNewNe
+         STA     mNextT,x    ; adOldNe.mNextT  =  adNewNe
+         LDX     adNewNe,d   ; x = adNewNe
+         RET0                
 ;
-entreeA: LDX     racine,d             ; initialisation de X à l'adresse de racine
-         LDX     mNextP,x             ; initialisation de mNextP à NextP de racine
-         LDX     mNextT,x             ; initialisation de mNextT à NextT de racine
-         LDA     0,i
-         CHARI   choix,d          
-         LDBYTEA choix,d
-         STBYTEA unChar,d             ; unChar = valeur du code morse
-         CALL    loopEntr
-         LDA     0,i   
-         LDBYTEA unChar,d 
-         STBYTEA mVal,x               ; X.val = getInt();
-         BR      menu
+entreeA: LDX     racine,d    ; initialisation de X à l'adresse de racine
+         LDX     mNextP,x    ; initialisation de mNextP à NextP de racine
+         LDX     mNextT,x    ; initialisation de mNextT à NextT de racine
+         LDA     0,i         
+         CHARI   choix,d     
+         LDBYTEA choix,d     
+         STBYTEA unChar,d    ; unChar = valeur du code morse
+         CALL    loopEntr    
+         LDA     0,i         
+         LDBYTEA unChar,d    
+         STBYTEA mVal,x      ; X.val = getInt();
+         BR      menu        
 ;
-loopEntr: LDA     0,i
-         CHARI   choix,d
-         LDBYTEA choix,d
-         STBYTEA morse,d              ; morse = phrase.charAt(i)
+loopEntr:LDA     0,i         
+         CHARI   choix,d     
+         LDBYTEA choix,d     
+         STBYTEA morse,d     ; morse = phrase.charAt(i)
 ;
-         CPA     '\n',i               ; (phrase.charAt(i) != '\n')
-         BREQ    finCall              ; fin boucle                          
+         CPA     '\n',i      ; (phrase.charAt(i) != '\n')
+         BREQ    finCall     ; fin boucle
 ;
-         CPA     carEspa,d            ; (phrase.charAt(i) != ' ')
-         BREQ    finCall              ; fin boucle                          
+         CPA     carEspa,d   ; (phrase.charAt(i) != ' ')
+         BREQ    finCall     ; fin boucle
 ;
-         CPA    '.',i                 ; if (signal == '.')
-         BREQ   nodeNulP 
-;         
-         CPA    '-',i                 ; if (signal == '-')
-         BREQ   nodeNulT  
-;         
-         BR      loopEntr
+         CPA     '.',i       ; if (signal == '.')
+         BREQ    nodeNulP    
 ;
-nodeNulP:  LDA   mNextP,x           
-         CPA     carNull,d       
-         BREQ    brNodeP              ; if (courrant.point = null)
-         LDX     mNextP,x             ; sinon courrant = courrant.point;
-         BR      loopEntr
+         CPA     '-',i       ; if (signal == '-')
+         BREQ    nodeNulT    
 ;
-brNodeP: STX    adOldNe,d             ; adOldNe = X;  
-         LDA     mLength,i        
-         CALL    new                  ; X = new Maillon(); #mVal #mNextP #mNextT 
-         LDA     0,i   
-         LDBYTEA "0",i                ; A = '0'
-         STBYTEA mVal,x               ; X.val = 0;
-         LDA     carNull,d            ; A = "0"      
-         STA     mNextP,x             ; X.NextP = 0;
-         STA     mNextT,x             ; X.NextT = 0;  
-         STX     adNewNe,d            ; adNewNe = X; 
-         LDX     adOldNe,d            ; x = adOldNe  
-         LDA     adNewNe,d            ; A = adNewNe    
-         STA     mNextP,x             ; adOldNe.mNextP  =  adNewNe
-         LDX     adNewNe,d            ; x = adNewNe 
-         BR      loopEntr          
+         BR      loopEntr    
 ;
-nodeNulT:  LDA   mNextT,x           
-         CPA     carNull,d       
-         BREQ    brNodeT              ; if (courrant.tiret = null) 
-         LDX     mNextT,x             ; sinon courrant = courrant.tiret;
-         BR      loopEntr
+nodeNulP:LDA     mNextP,x    
+         CPA     carNull,d   
+         BREQ    brNodeP     ; if (courrant.point = null)
+         LDX     mNextP,x    ; sinon courrant = courrant.point;
+         BR      loopEntr    
 ;
-brNodeT: STX     adOldNe,d            ; adOldNe = X;  
-         LDA     mLength,i        
-         CALL    new                  ; X = new Maillon(); #mVal #mNextP #mNextT 
-         LDA     0,i   
-         LDBYTEA "0",i                ; A = '0'
-         STBYTEA mVal,x               ; X.val = 0;
-         LDA     carNull,d            ; A = "0"       
-         STA     mNextP,x             ; X.NextP = 0;
-         STA     mNextT,x             ; X.NextT = 0;  
-         STX     adNewNe,d            ; adNewNe = X;    
-         LDX     adOldNe,d            ; x = adOldNe  
-         LDA     adNewNe,d            ; A = adNewNe    
-         STA     mNextT,x             ; adOldNe.mNextT  =  adNewNe
-         LDX     adNewNe,d            ; x = adNewNe 
-         BR      loopEntr         
+brNodeP: STX     adOldNe,d   ; adOldNe = X;
+         LDA     mLength,i   
+         CALL    new         ; X = new Maillon(); #mVal #mNextP #mNextT
+         LDA     0,i         
+         LDBYTEA "0",i       ; A = '0'
+         STBYTEA mVal,x      ; X.val = 0;
+         LDA     carNull,d   ; A = "0"
+         STA     mNextP,x    ; X.NextP = 0;
+         STA     mNextT,x    ; X.NextT = 0;
+         STX     adNewNe,d   ; adNewNe = X;
+         LDX     adOldNe,d   ; x = adOldNe
+         LDA     adNewNe,d   ; A = adNewNe
+         STA     mNextP,x    ; adOldNe.mNextP  =  adNewNe
+         LDX     adNewNe,d   ; x = adNewNe
+         BR      loopEntr    
+;
+nodeNulT:LDA     mNextT,x    
+         CPA     carNull,d   
+         BREQ    brNodeT     ; if (courrant.tiret = null)
+         LDX     mNextT,x    ; sinon courrant = courrant.tiret;
+         BR      loopEntr    
+;
+brNodeT: STX     adOldNe,d   ; adOldNe = X;
+         LDA     mLength,i   
+         CALL    new         ; X = new Maillon(); #mVal #mNextP #mNextT
+         LDA     0,i         
+         LDBYTEA "0",i       ; A = '0'
+         STBYTEA mVal,x      ; X.val = 0;
+         LDA     carNull,d   ; A = "0"
+         STA     mNextP,x    ; X.NextP = 0;
+         STA     mNextT,x    ; X.NextT = 0;
+         STX     adNewNe,d   ; adNewNe = X;
+         LDX     adOldNe,d   ; x = adOldNe
+         LDA     adNewNe,d   ; A = adNewNe
+         STA     mNextT,x    ; adOldNe.mNextT  =  adNewNe
+         LDX     adNewNe,d   ; x = adNewNe
+         BR      loopEntr    
 ; variables locales
-adOldNe: .BLOCK  2                     ; #2h adresse de l'ancien noeud 
-adNewNe: .BLOCK  2                     ; #2h adresse du nouveau noeud 
+adOldNe: .BLOCK  2           ; #2h adresse de l'ancien noeud
+adNewNe: .BLOCK  2           ; #2h adresse du nouveau noeud
 ;
-decoded: BR     menu
+decoded: BR      menu        
 ;
 ; ERREUR : message d'erreur
 erreur:  STRO    mErreur,d   ;
-         BR      fin  
+         BR      fin         
 ;
 ; FINCALL: Fin d'un CALL
-finCall: RET0
+finCall: RET0                
 ;
 ; FIN : etiquette pour quitter le programme
 fin:     STOP                
 ;
 ; VARIABLES GLOBALES
-carNull: .WORD   "0"
-carEspa: .WORD   " "
-racine:  .BLOCK  2           ; #2h  adresse noeud racine del'arbre binaire 
-nodeE:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire 
-nodeVidE:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire 
-nodeT:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire 
-nodeVidT:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire 
-morse:   .BLOCK  1           ; #1c  codeMorse reçu char par char 
+carNull: .WORD   "0"         
+carEspa: .WORD   " "         
+racine:  .BLOCK  2           ; #2h  adresse noeud racine del'arbre binaire
+nodeE:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
+nodeVidE:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
+nodeT:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
+nodeVidT:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
+morse:   .BLOCK  1           ; #1c  codeMorse reçu char par char
 unChar:  .BLOCK  1           ; #1c  valeur du code morse
 ; MESSAGES
 mErreur: .ASCII  "Erreur: commande inconnue\n\x00"
 mTotal:  .ASCII  "total=\x00"
-; STRUCTURE d'un noeud 
+; STRUCTURE d'un noeud
 ; Un arbre binaire est constituée de branches et de noeuds.
 ; Chaque noeud contient une valeur et les adresses des prochain noeud "point" ou "tiret" suivant.
 ; La fin d'une branche est marquée arbitrairement par l'adresse 0
 mVal:    .EQUATE 0           ; #1c valeur de l'élément dans le noeud
 mNextP:  .EQUATE 1           ; #2h noeud "point" (null (aka 0) pour fin de liste)
 mNextT:  .EQUATE 3           ; #2h noeud "tiret" (null (aka 0) pour fin de liste)
-mLength: .EQUATE 5           ; taille d'un noeud en octets 
+mLength: .EQUATE 5           ; taille d'un noeud en octets
 ;
 ;
 ;******* operator new
@@ -270,4 +270,3 @@ new:     LDX     hpPtr,d     ;returned pointer
 hpPtr:   .ADDRSS heap        ;address of next free byte
 heap:    .BLOCK  1           ;first byte in the heap
          .END                  
-
