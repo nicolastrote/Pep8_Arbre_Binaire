@@ -259,13 +259,13 @@ loopDeco:LDA     0,i
 ;
          BR      loopDeco    
 ;
-nodeGoP: STX     mNextP,x    ; X = Next adresse "."
+nodeGoP: LDX     mNextP,x    ; X = Next adresse "."
          LDA     0,i
          LDA     mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    
 ;
-nodeGoT: STX     mNextT,x    ; X = Next adresse "-"
+nodeGoT: LDX     mNextT,x    ; X = Next adresse "-"
          LDA     0,i
          LDA     mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
