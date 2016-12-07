@@ -233,9 +233,9 @@ decodeFc: LDX     racine,d    ; initialisation de X à l'adresse de racine
          STBYTEA unChar,d    ; initialisation de unChar = "0"
          CALL    loopDeco    ; => loopDeco  
          LDA     0,i
-         LDBYTEA unChar,d   
-         BREQ    "0",i       ; if unChar = "0"
-         CALL    AffiNop     ; => AffNop        
+         LDBYTEA unChar,d 
+         CPA     "0",i       ; if unChar = "0"
+         BREQ    AffiNop     ; => AffNop        
          CHARO   unChar,d  
          RET0       
 ;
@@ -261,13 +261,13 @@ loopDeco:LDA     0,i
 ;
 nodeGoP: LDX     mNextP,x    ; X = Next adresse "."
          LDA     0,i
-         LDA     mVal,x    
+         LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    
 ;
 nodeGoT: LDX     mNextT,x    ; X = Next adresse "-"
          LDA     0,i
-         LDA     mVal,x    
+         LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    
 ;
