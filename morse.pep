@@ -2,7 +2,7 @@
 ;
 ; Le programme "TP3 - Morse personnalisé".
 ;
-; @author Nicolas Trote
+; @author Nicolas Trote - Jennifer Dupuis
 ; @version 2016-10-25
 ;
 ;          Le programme "TP3 - Morse personnalisé" permet d'encoder et de
@@ -323,7 +323,7 @@ AffiInt: STRO    mInt,d      ; CHARO   carInte,d
 ;
 finTrad: CHARO   "\n",i      
          BR      menu        ; => menu
-;888888888888888888888888888888888888888888888888
+;
 liste:   LDX     racine,d    ; X = racine
          SUBSP   2,i         ; #adressL
          STX     adressL,s   ; #adressL = X
