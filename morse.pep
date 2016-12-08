@@ -44,7 +44,7 @@ menu:    LDX     racine,d    ; initialisation de X
          BREQ    decoded     ; =>  décodage d'une lettre
 ;
          CPA     't',i       ; cas choix = 't'
-         BREQ    decoded     ; =>  traduction d'une séquence morse complète en texte.
+         BREQ    traduc      ; =>  traduction d'une séquence morse complète en texte.
 ;
          CPA     'a',i       ; cas choix = 'a'
          BREQ    entreeA     ; =>  Ajoute un code Morse
@@ -249,7 +249,7 @@ loopDeco:LDA     0,i
          BREQ    finCall     ; => fin boucle
 ;
          CPA     carEspa,d   ; if (morse == ' ')
-         BREQ    finCall     ; => fin boucle
+         BREQ    finSpace    ; => finSpace
 ;
          LDA     0,i         ; init unChar car nouvelle boucle
          LDBYTEA "0",i
@@ -269,22 +269,59 @@ loopDeco:LDA     0,i
 nodeGoP: LDA     mNextP,x    ; Verif si mNextP existe?
          CPA     "0",i       ; if mNextP = "0" 
          BREQ    finGo       ; => finGo
+;
          LDX     mNextP,x    ; X = Next adresse "."
          LDA     0,i
          LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    ; => loopDeco 
 ;
-finGo:  BR      finCall      ; => finCall  
+finGo:   LDA     0,i
+         LDBYTEA unChar,d    ; unChar = '0'
+         BR      loopDeco    ; => loopDeco  
+;
+finSpace:LDX     racine,d    ; initialisation de X à l'adresse de racine
+         BR      finCall     ; => finCall   
 ;
 nodeGoT: LDA     mNextT,x    ; Verif si mNextT existe?
          CPA     "0",i       ; if mNextT = "0" 
          BREQ    finGo       ; => finGo
+;
          LDX     mNextT,x    ; X = Next adresse "-"
          LDA     0,i
          LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    
+;
+traduc:  LDX     racine,d    ; initialisation de X à l'adresse de racine
+         LDA     0,i
+         LDBYTEA "0",i
+         STBYTEA unChar,d    ; initialisation de unChar = "0"
+;
+         CALL    loopDeco    ; => loopDeco 
+; 
+         LDA     0,i
+         LDBYTEA unChar,d    ; A = unChar 
+         CPA     "0",i       ; if unChar = "0"
+         BREQ    AffiInt     ; => AffiInt        
+         CHARO   unChar,d    ; sinon print(unChar)
+;
+         LDA     0,i
+         LDBYTEA choix,d     ; A = choix 
+         CPA     "\n",i      ; if unChar = "\n"
+         BREQ    finTrad     ; => finTrad
+;
+         BR traduc
+;
+AffiInt: STRO    mInt,d      ; CHARO   carInte,d
+         LDA     0,i
+         LDBYTEA choix,d     ; A = choix 
+         CPA     "\n",i      ; if unChar = "\n"
+         BREQ    finTrad     ; => finTrad
+         BR      traduc      ; sinon => traduc
+;
+finTrad: CHARO   "\n",i      
+         BR      menu        ; => menu
 ;
 ; ERREUR : message d'erreur
 erreur:  STRO    mErreur,d   ;
@@ -307,7 +344,8 @@ nodeVidT:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binai
 morse:   .BLOCK  1           ; #1c  codeMorse reçu char par char
 unChar:  .BLOCK  1           ; #1c  valeur du code morse
 ; MESSAGES
-mNop: .ASCII  "nop\x00"
+mInt:    .ASCII  "?\x00"
+mNop:    .ASCII  "nop\x00"
 mErreur: .ASCII  "Erreur: commande inconnue\n\x00"
 mTotal:  .ASCII  "total=\x00"
 ; STRUCTURE d'un noeud
