@@ -268,18 +268,18 @@ loopDeco:LDA     0,i
 ;
 nodeGoP: LDA     mNextP,x    ; Verif si mNextP existe?
          CPA     "0",i       ; if mNextP = "0" 
-         BREQ    finGo      ; => finGo
+         BREQ    finGo       ; => finGo
          LDX     mNextP,x    ; X = Next adresse "."
          LDA     0,i
          LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    ; => loopDeco 
 ;
-finGo:  BR      finCall    ; => finCall  
+finGo:  BR      finCall      ; => finCall  
 ;
 nodeGoT: LDA     mNextT,x    ; Verif si mNextT existe?
          CPA     "0",i       ; if mNextT = "0" 
-         BREQ    finGo      ; => finGo
+         BREQ    finGo       ; => finGo
          LDX     mNextT,x    ; X = Next adresse "-"
          LDA     0,i
          LDBYTEA mVal,x    
