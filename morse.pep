@@ -1,24 +1,24 @@
 ;
 ;
-; Le programme "TP3 - Morse personnalisé".
+; Le programme "TP3 - Morse personnalisÃ©".
 ;
-; @author Nicolas Trote - Jennifer Dupuis
+; @author Nicolas Trote
 ; @version 2016-10-25
 ;
-;          Le programme "TP3 - Morse personnalisé" permet d'encoder et de
+;          Le programme "TP3 - Morse personnalisÃ©" permet d'encoder et de
 ;          traduire du code morse au travers d'un arbre binaire. L'arbre
-;          binaire contiendra les caractères point et tiret.
+;          binaire contiendra les caractÃ¨res point et tiret.
 ; *
 ; * Lancement du programme et initialisation
 ; *
 main:    LDA     0,i         
-         CALL    iniRacin    ; création de la racine
-         CALL    initE       ; création du noeud (".", 'E')
-         CALL    initVidE    ; création du noeud ("..", '0')
-         CALL    initS       ; création du noeud ("...", 'S')
-         CALL    initT       ; création du noeud ("-", 'T')
-         CALL    initVidT    ; création du noeud ("--", '0')
-         CALL    initO       ; création du noeud ("---", 'O')
+         CALL    iniRacin    ; crÃ©ation de la racine
+         CALL    initE       ; crÃ©ation du noeud (".", 'E')
+         CALL    initVidE    ; crÃ©ation du noeud ("..", '0')
+         CALL    initS       ; crÃ©ation du noeud ("...", 'S')
+         CALL    initT       ; crÃ©ation du noeud ("-", 'T')
+         CALL    initVidT    ; crÃ©ation du noeud ("--", '0')
+         CALL    initO       ; crÃ©ation du noeud ("---", 'O')
          BR      menu        
 ; *
 ; * Menu du programme
@@ -42,16 +42,16 @@ menu:    LDX     racine,d    ; initialisation de X
          BREQ    fin         ; =>  fin
 ;
          CPA     'd',i       ; cas choix = 'd'
-         BREQ    decoded     ; =>  décodage d'une lettre
+         BREQ    decoded     ; =>  dÃ©codage d'une lettre
 ;
          CPA     't',i       ; cas choix = 't'
-         BREQ    traduc      ; =>  traduction d'une séquence morse complète en texte.
+         BREQ    traduc      ; =>  traduction d'une sÃ©quence morse complÃ¨te en texte.
 ;
          CPA     'a',i       ; cas choix = 'a'
          BREQ    entreeA     ; =>  Ajoute un code Morse
 ;
          CPA     'l',i       ; cas choix = 'l'
-         BREQ    liste       ; =>  Liste les caractères de l'arbre
+         BREQ    liste       ; =>  Liste les caractÃ¨res de l'arbre
 ;
          BR      erreur      ; sinon => erreur
 ;
@@ -147,7 +147,7 @@ newNodeT:STX     adOldNe,d   ; adOldNe = X;
          LDX     adNewNe,d   ; x = adNewNe
          RET0                
 ;
-entreeA: LDX     racine,d    ; initialisation de X à l'adresse de racine
+entreeA: LDX     racine,d    ; initialisation de X Ã  l'adresse de racine
          LDA     0,i         
          CHARI   choix,d     
          LDBYTEA choix,d     
@@ -228,7 +228,7 @@ decoded: CALL    decodeFc
          CHARO   "\n",i
          BR      menu   
 ;
-decodeFc: LDX     racine,d    ; initialisation de X à l'adresse de racine
+decodeFc: LDX     racine,d    ; initialisation de X Ã  l'adresse de racine
          LDA     0,i
          LDBYTEA "0",i
          STBYTEA unChar,d    ; initialisation de unChar = "0"
@@ -281,7 +281,7 @@ finGo:   LDA     0,i
          LDBYTEA unChar,d    ; unChar = '0'
          BR      loopDeco    ; => loopDeco  
 ;
-finSpace:LDX     racine,d    ; initialisation de X à l'adresse de racine
+finSpace:LDX     racine,d    ; initialisation de X Ã  l'adresse de racine
          BR      finCall     ; => finCall   
 ;
 nodeGoT: LDA     mNextT,x    ; Verif si mNextT existe?
@@ -294,7 +294,7 @@ nodeGoT: LDA     mNextT,x    ; Verif si mNextT existe?
          STBYTEA unChar,d    ; unChar = mVal   
          BR      loopDeco    
 ;
-traduc:  LDX     racine,d    ; initialisation de X à l'adresse de racine
+traduc:  LDX     racine,d    ; initialisation de X Ã  l'adresse de racine
          LDA     0,i
          LDBYTEA "0",i
          STBYTEA unChar,d    ; initialisation de unChar = "0"
@@ -398,7 +398,7 @@ nodeE:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binai
 nodeVidE:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
 nodeT:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
 nodeVidT:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
-morse:   .BLOCK  1           ; #1c  codeMorse reçu char par char
+morse:   .BLOCK  1           ; #1c  codeMorse reÃ§u char par char
 unChar:  .BLOCK  1           ; #1c  valeur du code morse
 ; MESSAGES
 mInt:    .ASCII  "?\x00"
@@ -406,10 +406,10 @@ mNop:    .ASCII  "nop\x00"
 mErreur: .ASCII  "Erreur: commande inconnue\n\x00"
 mTotal:  .ASCII  "total=\x00"
 ; STRUCTURE d'un noeud
-; Un arbre binaire est constituée de branches et de noeuds.
+; Un arbre binaire est constituÃ©e de branches et de noeuds.
 ; Chaque noeud contient une valeur et les adresses des prochain noeud "point" ou "tiret" suivant.
-; La fin d'une branche est marquée arbitrairement par l'adresse 0
-mVal:    .EQUATE 0           ; #1c valeur de l'élément dans le noeud
+; La fin d'une branche est marquÃ©e arbitrairement par l'adresse 0
+mVal:    .EQUATE 0           ; #1c valeur de l'Ã©lÃ©ment dans le noeud
 mNextP:  .EQUATE 1           ; #2h noeud "point" (null (aka 0) pour fin de liste)
 mNextT:  .EQUATE 3           ; #2h noeud "tiret" (null (aka 0) pour fin de liste)
 mLength: .EQUATE 5           ; taille d'un noeud en octets
