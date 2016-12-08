@@ -251,21 +251,36 @@ loopDeco:LDA     0,i
          CPA     carEspa,d   ; if (morse == ' ')
          BREQ    finCall     ; => fin boucle
 ;
+         LDA     0,i         ; init unChar car nouvelle boucle
+         LDBYTEA "0",i
+         STBYTEA unChar,d    ; initialisation de unChar = "0"
+;
+         LDA     0,i
+         LDBYTEA choix,d
+;
          CPA     '.',i       ; if (morse == '.')
          BREQ    nodeGoP     ; => nodeGoP
 ;
          CPA     '-',i       ; if (morse == '-')
          BREQ    nodeGoT     ; => nodeGoT
 ;
-         BR      loopDeco    
+         BR      loopDeco    ; => loopDeco 
 ;
-nodeGoP: LDX     mNextP,x    ; X = Next adresse "."
+nodeGoP: LDA     mNextP,x    ; Verif si mNextP existe?
+         CPA     "0",i       ; if mNextP = "0" 
+         BREQ    finGo      ; => finGo
+         LDX     mNextP,x    ; X = Next adresse "."
          LDA     0,i
          LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
-         BR      loopDeco    
+         BR      loopDeco    ; => loopDeco 
 ;
-nodeGoT: LDX     mNextT,x    ; X = Next adresse "-"
+finGo:  BR      finCall    ; => finCall  
+;
+nodeGoT: LDA     mNextT,x    ; Verif si mNextT existe?
+         CPA     "0",i       ; if mNextT = "0" 
+         BREQ    finGo      ; => finGo
+         LDX     mNextT,x    ; X = Next adresse "-"
          LDA     0,i
          LDBYTEA mVal,x    
          STBYTEA unChar,d    ; unChar = mVal   
