@@ -1,11 +1,11 @@
 ;
 ;
-; Le programme "TP3 - Morse personnalisé".
+; Morse personnalisé
 ;
 ; @author Nicolas Trote
 ; @version 2016-10-25
 ;
-;          Le programme "TP3 - Morse personnalisé" permet d'encoder et de
+;          Le programme "Morse personnalisé" permet d'encoder et de
 ;          traduire du code morse au travers d'un arbre binaire. L'arbre
 ;          binaire contiendra les caractères point et tiret.
 ; *
