@@ -323,72 +323,61 @@ AffiInt: STRO    mInt,d      ; CHARO   carInte,d
 ;
 finTrad: CHARO   "\n",i      
          BR      menu        ; => menu
-;
-liste:   LDX     racine,d    ; initialisation de X à l'adresse de racine
-         SUBSP   2,i         ; #adressL 
-         STX     adressL,s   ; initialisation de adressL = racine
-;
-         call    ListeOrd    ; => ListeOrd 
-;
+;888888888888888888888888888888888888888888888888
+liste:   LDX     racine,d    ; X = racine
+         SUBSP   2,i         ; #adressL
+         STX     adressL,s   ; #adressL = X
+         CALL    recursi;    ; recursi(X)
+         ADDSP   2,i         ; #adressL 
+
          stro    mTotal,d    ; print("total=" + Noeud.cptListe + "\n");
          DECO    cptListe,d  
          CHARO   "\n",i 
          BR      menu        ; => menu 
 ;
-ListeOrd:ADDSP   2,i         ; #adressL  
-         STX     adressL,s   ; initialisation de adressL = racine 
+recursi: CALL    AffChar     ; Print()
+
+         LDA     mNextP,x    ; 
+         CPA     "0",i       ; if mNextP != "0" 
+         BREQ    recurT      ; {
+         SUBSP   2,i         ;    #adressL
+         STX     adressL,s   ;    #adressL = X
+         LDX     mNextP,x    ;    X = Noeud.mNextP
+         CALL    recursi     ;    recursi(X)
+         ADDSP   2,i         ; #adressL 
+;                            ; }
+recurT:  LDA     mNextT,x    ; 
+         CPA     "0",i       ; if mNextT != "0"
+         BREQ    recurFin    ; {
+         SUBSP   2,i         ;    #adressL
+         STX     adressL,s   ;    #adressL = X
+         LDX     mNextT,x    ;    X = Noeud.mNextT  
+         CALL    recursi     ;    recursi(X)
+         ADDSP   2,i         ; #adressL 
+;                            ; }
+recurFin:        LDX     2,s   ; X = addresse noeud precedent
+                 RET0
+          
+         
+               
+         
 ;
-         LDA     0,i
+AffChar: LDA     0,i
          LDBYTEA mVal,x      ; A = mVar 
-         CPA     carEspa,d   ; if mVar = " " 
-         BREQ    pasChar     ; => pasChar 
-         CPA     "0",i       ; if mVar = "0" 
-         BREQ    pasChar     ; => pasChar
+         CPA     "0",i       ; if mVar = "0"    
+         BREQ    finCall
 ;
          CHARO   mVal,x      ; println(mVal)  
          CHARO   "\n",i   
 ;
          LDA     cptListe,d  ; cptListe += 1
          ADDA    1,i
-         STA     cptListe,d   
-;
-         LDA     mNextP,x    ; Verif si mNextP existe?
-         CPA     "0",i       ; if mNextT = "0" 
-         BRNE    recurP      ; => recurP
-;
-         LDA     mNextT,x    ; Verif si mNextT existe?
-         CPA     "0",i       ; if mNextT = "0" 
-         BRNE    recurT      ; => recurT
-;
-         BR      finList            
+         STA     cptListe,d 
+         RET0             
 ;
 ;Variable locale
-adressL: .EQUATE 0           ;#2h 
-;
-pasChar: LDA     mNextP,x    ; Verif si mNextP existe?
-         CPA     "0",i       ; if mNextT = "0" 
-         BRNE    recurP      ; => recurP
-;
-         LDA     mNextT,x    ; Verif si mNextT existe?
-         CPA     "0",i       ; if mNextT = "0" 
-         BRNE    recurT      ; => recurT
-;
-         BR      finList
-;
-finList: ADDSP   2,i         ; #adressL 
-         RET0 
-;
-recurP:  LDX     mNextP,x    ; X = Next adresse "."
-         SUBSP   2,i         ; #adressL
-         STX     adressL,s
-         CALL    ListeOrd    ; => ListeOrd
-         BR      finList
-;
-recurT:  LDX     mNextT,x    ; X = Next adresse "-"
-         SUBSP   2,i         ; #adressL
-         STX     adressL,s  
-         CALL    ListeOrd    ; => ListeOrd
-         BR      finList  
+adressL: .EQUATE 0           ;#2h
+;  
 ; ERREUR : message d'erreur
 erreur:  STRO    mErreur,d   ;
          BR      fin         
