@@ -25,6 +25,7 @@ main:    LDA     0,i
 ; *
 menu:    LDX     racine,d    ; initialisation de X
          LDA     0,i         ; initialisation de A
+         STA     cptListe,d  ; initialisation du compteur
          CHARI   choix,d     ; lecture du choix = {q,t,c, ,\n}
          LDBYTEA choix,d     
 ;
@@ -50,7 +51,7 @@ menu:    LDX     racine,d    ; initialisation de X
          BREQ    entreeA     ; =>  Ajoute un code Morse
 ;
          CPA     'l',i       ; cas choix = 'l'
-         BREQ    decoded     ; =>  Liste les caractères de l'arbre
+         BREQ    liste       ; =>  Liste les caractères de l'arbre
 ;
          BR      erreur      ; sinon => erreur
 ;
@@ -323,6 +324,71 @@ AffiInt: STRO    mInt,d      ; CHARO   carInte,d
 finTrad: CHARO   "\n",i      
          BR      menu        ; => menu
 ;
+liste:   LDX     racine,d    ; initialisation de X à l'adresse de racine
+         SUBSP   2,i         ; #adressL 
+         STX     adressL,s   ; initialisation de adressL = racine
+;
+         call    ListeOrd    ; => ListeOrd 
+;
+         stro    mTotal,d    ; print("total=" + Noeud.cptListe + "\n");
+         DECO    cptListe,d  
+         CHARO   "\n",i 
+         BR      menu        ; => menu 
+;
+ListeOrd:ADDSP   2,i         ; #adressL  
+         STX     adressL,s   ; initialisation de adressL = racine 
+;
+         LDA     0,i
+         LDBYTEA mVal,x      ; A = mVar 
+         CPA     carEspa,d   ; if mVar = " " 
+         BREQ    pasChar     ; => pasChar 
+         CPA     "0",i       ; if mVar = "0" 
+         BREQ    pasChar     ; => pasChar
+;
+         CHARO   mVal,x      ; println(mVal)  
+         CHARO   "\n",i   
+;
+         LDA     cptListe,d  ; cptListe += 1
+         ADDA    1,i
+         STA     cptListe,d   
+;
+         LDA     mNextP,x    ; Verif si mNextP existe?
+         CPA     "0",i       ; if mNextT = "0" 
+         BRNE    recurP      ; => recurP
+;
+         LDA     mNextT,x    ; Verif si mNextT existe?
+         CPA     "0",i       ; if mNextT = "0" 
+         BRNE    recurT      ; => recurT
+;
+         BR      finList            
+;
+;Variable locale
+adressL: .EQUATE 0           ;#2h 
+;
+pasChar: LDA     mNextP,x    ; Verif si mNextP existe?
+         CPA     "0",i       ; if mNextT = "0" 
+         BRNE    recurP      ; => recurP
+;
+         LDA     mNextT,x    ; Verif si mNextT existe?
+         CPA     "0",i       ; if mNextT = "0" 
+         BRNE    recurT      ; => recurT
+;
+         BR      finList
+;
+finList: ADDSP   2,i         ; #adressL 
+         RET0 
+;
+recurP:  LDX     mNextP,x    ; X = Next adresse "."
+         SUBSP   2,i         ; #adressL
+         STX     adressL,s
+         CALL    ListeOrd    ; => ListeOrd
+         BR      finList
+;
+recurT:  LDX     mNextT,x    ; X = Next adresse "-"
+         SUBSP   2,i         ; #adressL
+         STX     adressL,s  
+         CALL    ListeOrd    ; => ListeOrd
+         BR      finList  
 ; ERREUR : message d'erreur
 erreur:  STRO    mErreur,d   ;
          BR      fin         
@@ -335,7 +401,9 @@ fin:     STOP
 ;
 ; VARIABLES GLOBALES
 carNull: .WORD   "0"         
-carEspa: .WORD   " "         
+carEspa: .WORD   " " 
+pasNext: .BLOCK  2           ; #2d  test si il existe un noeud suivant (0=false, 1=true) 
+cptListe:.BLOCK  2           ; #2d  nombre de codes       
 racine:  .BLOCK  2           ; #2h  adresse noeud racine del'arbre binaire
 nodeE:   .BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
 nodeVidE:.BLOCK  2           ; #2h  adresse noeud pour initialiser l'arbre binaire
